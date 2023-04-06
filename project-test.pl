@@ -16,7 +16,7 @@
 ######## Edit the following to reflect your directory (mandatory):
 
 # root directory for the test files
-$test_files_root = "$ENV{HOME}/public_html/csce355/prog-proj1/test-files";
+$test_files_root = "$ENV{HOME}/acct/columbiw/CSCE355/SchoolProjects/test-files";
 
 ######## Editing below this line is strictly optional. ########
 
