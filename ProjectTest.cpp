@@ -106,7 +106,7 @@ void Graph::BFS(int s){
         queue.push_back(s);
         while(!queue.empty()){
                 s = queue.front();
-                cout<<s<<" ";
+                //cout<<s<<" ";
                 queue.pop_front();
 
                 for(auto adjacent : adj[s]){
@@ -160,7 +160,16 @@ int main(int argc, char* argv[]){
         // for(int i = 0;i<acceptStates.size();i++){
         //         cout<<acceptStates[i]<<endl;
         // }
-        cout<<gd[1]<<endl;
+
+        for(int i = 0;i<NFA.size();i++){
+                cout<<i;
+                for(int j = 0;j<20;j++){
+                        if(isdigit(NFA[i][j]))
+                        cout<<" found  "<<NFA[i][j]<<" at ";
+                }
+                cout<<endl;
+        }
+        
 	return 0;
 }
 
