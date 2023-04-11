@@ -7,17 +7,17 @@
 using namespace std;
 
 vector <string> NFA;
-vector<int> backedge;
-vector <char> acceptStates;
+vector <int> acceptStates;
 vector <int> States;
-vector <string> alphabet;
-vector<vector<int>> VEC;
+vector <string> alphabet; //NOT IN USE ATM
+vector<vector<string>> VEC;
+vector<vector<int>> gd;
 string State;
 string alpSize;
 string accStates;
 int numState;
 int betSize;
-string ep = "{}";
+
 
 
 /*TODO's
@@ -44,8 +44,8 @@ void readInput(int argc,char*argv[]){
                       accStates =   line.substr(line.find(":")+1);
                       for(int i = 0;i<accStates.size();i++){
                 if(!isspace(accStates[i])){
-                        
-                         acceptStates.push_back(accStates[i]);
+                        int test = accStates[i] -'0';
+                         acceptStates.push_back(test);
                 }
          }
                 }
@@ -65,9 +65,12 @@ void readNFA(int argc,char*argv[]){
                 while(getline(in,line)&&!line.empty()){
                         if(i>=3){
                          stringstream ss(line);
-                         //while(ss>>sub){
-                                NFA.push_back(line);
-                         //}
+                         NFA.push_back(line);
+                        //  while(ss>>sub){
+                        //         for(int k = 0;k<sub.size();k++){
+                        //                 NFA.push_back(sub[k]);
+                        //         }
+                        //  }
                         }
                         i++;
                         
@@ -101,10 +104,8 @@ void Graph::BFS(int s){
         list<int> queue;
         visited[s] =true;
         queue.push_back(s);
-
         while(!queue.empty()){
                 s = queue.front();
-                backedge.push_back(s);
                 cout<<s<<" ";
                 queue.pop_front();
 
@@ -125,51 +126,41 @@ int main(int argc, char* argv[]){
         for(int i=0;i<numState;i++){
                 States.push_back(i);  
         }
-//prints the vector of accepting states
-        // for(int i=0;i<acceptStates.size();i++){ 
-        //         cout<<acceptStates[i]<<endl;
-        // }
-
-//prints NFA vector
-        // for(int i = 0;i<NFA.size();i++){
-        //         cout<<NFA[i];
-        //         cout<<endl;
-        // }
-
         
 //places a vector into the vecotr of vectors and prints
-        // VEC.push_back(NFA);
-        
+
+        VEC.push_back(NFA);
         Graph g(numState);
-        g.addEdge(0,1);
-        g.addEdge(0,4);
-        g.addEdge(1,2);
-        g.addEdge(3,1);
-        g.addEdge(4,5);
-        g.addEdge(5,6);
-        g.addEdge(6,7);
-        g.addEdge(7,4);
-        cout<<"FOLLOWING BFS AT 0 "<<endl;
-        bool test = true;
+        for(int i = 0;i<VEC.size();i++){
+                for(int j =0;j<VEC[i].size();j++){
+                string test = VEC[i][j];
+                for(int k = 0;k<test.size();k++){
+                        if(isdigit(test[k])){
+                        int p = test[k]-'0';
+                        g.addEdge(j,p);
+                        for(int y = 0;y<acceptStates.size();y++){
+                                if(p == acceptStates[y]){
+                                        acceptStates.push_back(j);
+                                        if(j == acceptStates[y-1])
+                                        acceptStates.pop_back();
+                                }
+                        }
+                        }
+                }
+                
+                }
+        }
         for(int i = 0;i<numState;i++){
+
                 g.BFS(i);
                 cout<<endl;
                 
         }
-        
-        // cout<<endl;
-        // cout<<"TEST::  "<<endl<<endl;
-        // for(int i = 0;i<backedge.size();i++){
-        //         cout<<backedge[i];
-        //         cout<<endl;
+
+        // for(int i = 0;i<acceptStates.size();i++){
+        //         cout<<acceptStates[i]<<endl;
         // }
-        // cout<< "TEST    "<<endl<<endl;
-        // for(int i = 0;i<VEC.size();i++){
-        //         for(int j =0;j<VEC[i].size();j++){
-        //         cout<<j<<" "<<VEC[i][j]<<" ";
-        //         cout<<endl;
-        //         }
-        // }
+        cout<<gd[1]<<endl;
 	return 0;
 }
 
