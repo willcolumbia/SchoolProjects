@@ -54,12 +54,12 @@ void readNFA(int argc,char*argv[]){
                          stringstream ss(line);
                         string sub;
                          while(ss>>sub){
-                            for(int k = 0;k<sub.size();k++){
-                                if(sub[k]=='{' || sub[k] == '}'|| sub[k]==','){
-                                    sub[k] = ' ';
+                            // for(int k = 0;k<sub.size();k++){
+                            //     if(sub[k]=='{' || sub[k] == '}'|| sub[k]==','){
+                            //         sub[k] = ' ';
                                     
-                                }
-                            }
+                            //     }
+                            // }
                                 v1.push_back(sub); 
                          }
                          eNFA.push_back(v1);
@@ -73,51 +73,89 @@ void readNFA(int argc,char*argv[]){
               }
            }
 
+void addAcceptingStates(){
+    for(int i = 0;i<eNFA.size();i++){
+        string eTrans = eNFA[i][0];
+         for(int j = 0;j<eTrans.size();j++){
+            if(isdigit(eTrans[j])){
+                acceptStates.push_back(i);
+            }
+            
+        }
+    }
+    sort(acceptStates.begin(),acceptStates.end());
+    acceptStates.erase(unique(acceptStates.begin(),acceptStates.end()),acceptStates.end());
+}
+
+
+class NFA{
+    public:
+        void setState(int state, int sym,char newState){
+            //for(int i = 0;i<eNFA.size();i++){
+                //for(int j = 0;j<eNFA[i].size();j++){
+                   eNFA[state][sym].insert((eNFA[state][sym].length()-1),1,',');
+                   eNFA[state][sym].insert((eNFA[state][sym].length()-1),1,newState);
+                //}
+            //}
+        }
+        void goToState(int x){
+            vector <string> news;
+           vector<int> another;
+          // cout<<x;
+                for(int j =0;j<eNFA[x].size();j++){
+                    news.push_back(eNFA[x][j]);
+                }
+            
+            for(int i = 0;i<news.size();i++){
+                
+                //cout<<news[i]<<endl<<endl;
+
+        }
+        // for(int i = 0;i<another.size();i++){
+        //             cout<<" ASNOTHEWR "<<another[i];
+        //         }
+        }
+        
+};
 
 
 int main(int argc, char* argv[]){
     readInput(argc,argv);
     readNFA(argc,argv);
+    addAcceptingStates();
     cout<<"ALPHABET SIZE: "<<betSize<<endl<<endl;
-     for(int i = 0;i<eNFA.size();i++){
-        cout<<i<<" ";
+     NFA trial;
+     vector<string> N;
+     vector<int> pp;
+     string n;
+ for(int i = 0;i<eNFA.size();i++){
         for(int j = 0;j<eNFA[i].size();j++){
-            cout<<" "<<eNFA[i][j];
+            if(eNFA[i][j]!="{}"){
+                string n = eNFA[i][j];
+                n.erase(remove(n.begin(),n.end(),'{'),n.end());
+                n.erase(remove(n.begin(),n.end(),'}'),n.end());
+                n.erase(remove(n.begin(),n.end(),','),n.end());
+                if(j==0){
+                    cout<<n<<" ";
+                }
+            }
         }
         cout<<endl;
-        
-    }
+       
+ }
+ int r;
+ for(int i = 0;i<N.size();i++){
+    for(int j = 0;j<N[i].size();j++){
+        if(isdigit(N[i][j])){
 
-    //ADD NEW ACCEPTING STATES
-    for(int i = 0;i<eNFA.size();i++){
-         string line = eNFA[i][0];
-         for(int j = 0;j<line.size();j++){
-            if(isdigit(line[j])){
-                acceptStates.push_back(i);
-            }
-         }
-        
-    }
-    //REMOVE DUPLICATE ACCEPTING STATES
-    sort(acceptStates.begin(),acceptStates.end());
-    acceptStates.erase(unique(acceptStates.begin(),acceptStates.end()),acceptStates.end());
-    
-    //bool test = true;
-    //while(test){
-        for(int i = 0;i<eNFA.size();i++){
-            int q,r,s = i;
-            for(int j = 0;j<eNFA[i].size();j++){
-                int s = j;
-                string rs = eNFA[i][j];
-                if(!rs.empty())
-                cout<<rs<<endl;
-            }
+            int r = N[i][j]-'0';
+            pp.push_back(r);
         }
-        //test == false;
-   // }
-    
-    // for(int i = 0;i<acceptStates.size();i++){
-    //     cout<<acceptStates[i]<<endl;
-    // }
-    // return 0;
+    }
+ }
+ for(int i= 0;i<pp.size();i++){
+    trial.goToState(pp[i]);
+ }
+ 
+    return 0;
 }   
