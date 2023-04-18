@@ -5,11 +5,10 @@
 #include <vector>
 #include <bits/stdc++.h>
 using namespace std;
-
 vector <string> NFA;
 vector <int> acceptStates;
 vector <int> States;
-vector <string> alphabet; //NOT IN USE ATM
+ //NOT IN USE ATM
 vector<vector<string>> VEC;
 vector<vector<int>> gd;
 string State;
@@ -108,7 +107,6 @@ void Graph::BFS(int s){
                 s = queue.front();
                 cout<<s<<" ";
                 queue.pop_front();
-
                 for(auto adjacent : adj[s]){
                         if(!visited[adjacent]){
                                 visited[adjacent] = true;
@@ -150,26 +148,22 @@ int main(int argc, char* argv[]){
                 
                 }
         }
-        for(int i = 0;i<numState;i++){
-
-                g.BFS(i);
-                cout<<endl;
+        string test = VEC[0][0];
+        cout<<test<<endl;
+        // for(int i = 0;i<VEC.size();i++){
+        //         for(int j = 0;j<VEC[i].size();j++){
+        //                 cout<<i<<"  "<<VEC[i][j];
+        //                 cout<<endl;
+        //         }
                 
-        }
+        // }
+
 
         // for(int i = 0;i<acceptStates.size();i++){
         //         cout<<acceptStates[i]<<endl;
         // }
 
-        for(int i = 0;i<NFA.size();i++){
-                cout<<i;
-                for(int j = 0;j<;j++){
-                        if(isdigit(NFA[i][j]))
-                        cout<<" found  "<<NFA[i][j]<<" at ";
-                }
-                cout<<endl;
-        }
-        
+      
 	return 0;
 }
 

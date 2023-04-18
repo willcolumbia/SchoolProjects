@@ -8,6 +8,7 @@ using namespace std;
 vector<string> v1;
 vector<vector<string>> eNFA;
 vector <int> acceptStates;
+
 string State;
 string alpSize;
 string accStates;
@@ -53,13 +54,14 @@ void readNFA(int argc,char*argv[]){
                         if(i>=3){
                          stringstream ss(line);
                         string sub;
+                        int j = 0;
                          while(ss>>sub){
-                            // for(int k = 0;k<sub.size();k++){
-                            //     if(sub[k]=='{' || sub[k] == '}'|| sub[k]==','){
-                            //         sub[k] = ' ';
-                                    
-                            //     }
-                            // }
+                             for(int k = 0;k<sub.size();k++){
+                                    if(isdigit(sub[k])){
+                                        cout<<i-3<<" "<<sub[k]<<" found at "<<j<<endl;
+                                    }
+                                }
+                            j++;
                                 v1.push_back(sub); 
                          }
                          eNFA.push_back(v1);
@@ -118,44 +120,93 @@ class NFA{
         
 };
 
+class Graph{
+        int V;
+        vector<list<int>> adj;
+
+public:
+        Graph(int V);
+        void addEdge(int v,int w);
+        void BFS(int s);
+};
+
+Graph::Graph(int V){
+        this->V=V;
+        adj.resize(V);
+}
+
+void Graph::addEdge(int v,int w){
+        adj[v].push_back(w);
+}
+
+void Graph::BFS(int s){
+        vector<bool> visited;
+        visited.resize(V,false);
+        list<int> queue;
+        visited[s] =true;
+        queue.push_back(s);
+        while(!queue.empty()){
+                s = queue.front();
+                //cout<<s<<" ";
+                queue.pop_front();
+                for(auto adjacent : adj[s]){
+                        if(!visited[adjacent]){
+                                cout<<"S : "<<s<<"  ADJACENT:  "<<adjacent<<" "<<endl;
+                                visited[adjacent] = true;
+                                queue.push_back(adjacent);
+                                
+                        }
+                }
+        }
+}
 
 int main(int argc, char* argv[]){
     readInput(argc,argv);
     readNFA(argc,argv);
     addAcceptingStates();
     cout<<"ALPHABET SIZE: "<<betSize<<endl<<endl;
-     NFA trial;
-     vector<string> N;
-     vector<int> pp;
-     string n;
- for(int i = 0;i<eNFA.size();i++){
-        for(int j = 0;j<eNFA[i].size();j++){
-            if(eNFA[i][j]!="{}"){
-                string n = eNFA[i][j];
-                n.erase(remove(n.begin(),n.end(),'{'),n.end());
-                n.erase(remove(n.begin(),n.end(),'}'),n.end());
-                n.erase(remove(n.begin(),n.end(),','),n.end());
-                if(j==0){
-                    cout<<n<<" ";
-                }
-            }
-        }
-        cout<<endl;
-       
- }
- int r;
- for(int i = 0;i<N.size();i++){
-    for(int j = 0;j<N[i].size();j++){
-        if(isdigit(N[i][j])){
+    Graph g(numState);
+    
+    g.addEdge(0,1);
+    g.addEdge(0,4);
+    g.addEdge(1,2);
+    g.addEdge(2,3);
+    g.addEdge(3,1);
+    g.addEdge(4,5);
+    g.addEdge(5,6);
+    g.addEdge(6,7);
+    g.addEdge(7,4);
+    //g.addEdge(0,2);
 
-            int r = N[i][j]-'0';
-            pp.push_back(r);
-        }
-    }
- }
- for(int i= 0;i<pp.size();i++){
-    trial.goToState(pp[i]);
- }
+    g.BFS(0);
+//  for(int i = 0;i<eNFA.size();i++){
+//         for(int j = 0;j<eNFA[i].size();j++){
+//             if(eNFA[i][j]!="{}"){
+//                 string n = eNFA[i][j];
+//                 n.erase(remove(n.begin(),n.end(),'{'),n.end());
+//                 n.erase(remove(n.begin(),n.end(),'}'),n.end());
+//                 n.erase(remove(n.begin(),n.end(),','),n.end());
+//                 if(j==0){
+//                     cout<<n<<" ";
+//                 }
+//             }
+//         }
+//         cout<<endl;
+       
+//  }
+//  int r;
+//  for(int i = 0;i<N.size();i++){
+//     for(int j = 0;j<N[i].size();j++){
+//         if(isdigit(N[i][j])){
+
+//             int r = N[i][j]-'0';
+//             pp.push_back(r);
+//         }
+//     }
+//  }
+//  for(int i= 0;i<pp.size();i++){
+//     trial.goToState(pp[i]);
+//  }
  
     return 0;
 }   
