@@ -148,8 +148,10 @@ int main(int argc, char* argv[]){
                 
                 }
         }
-        string test = VEC[0][0];
-        cout<<test<<endl;
+        for(int i = 0;i<numState;i++){
+                g.BFS(i);
+                cout<<endl;
+        }
         // for(int i = 0;i<VEC.size();i++){
         //         for(int j = 0;j<VEC[i].size();j++){
         //                 cout<<i<<"  "<<VEC[i][j];

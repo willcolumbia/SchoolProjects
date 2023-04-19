@@ -1,83 +1,64 @@
-// C++ program to represent undirected and weighted graph
-// using STL. The program basically prints adjacency list
-// representation of graph
 #include <bits/stdc++.h>
 using namespace std;
 vector <int> acceptingStates;
 vector<int> States;
-// vector<int> trans;
 vector<string> v1;
 vector<vector<string>> eNFA;
+vector<pair<int, int> > NFA[64];
+vector<pair<int, int> > hNFA[64];
+vector<pair<int, int> > tNFA[64];
+vector<pair<int, int> > jNFA[64];
 
 string State;
 string alpSize;
 string accStates;
 int numState;
 int betSize;
-vector<pair<int,int>> trans[64];
 // To add an edge
-void addEdge(vector <pair<int, int> > adj[], int u,
-									int v, int wt)
+void addEdge(vector <pair<int, int> > adj[], int u,int v, int wt)
 {
-	adj[u].push_back(make_pair(v, wt));
-	//adj[v].push_back(make_pair(u, wt));
-    trans[u].push_back(make_pair(v,wt));
-}
-void addEdgeTran(vector <pair<int, int> > trans[], int u,
-									int v, int wt)
-{
-	//adj[u].push_back(make_pair(v, wt));
-	//adj[v].push_back(make_pair(u, wt));
-    trans[u].push_back(make_pair(v,wt));
-}
-// void removeEdge(vector <pair<int, int> > adj[], int u,
-// 									int v, int wt)
-// {
-// 	adj[u].at();
-// 	//adj[v].push_back(make_pair(u, wt));
     
-// }
-void check(vector<pair<int,int> > trans[], int V){
-    int v,w;
-    for(int u = 0;u<V;u++){
-        for (auto it = trans[u].begin(); it!=trans[u].end(); it++){
-            v = it->first;
+	adj[u].push_back(make_pair(v, wt));
+   
+}
+int check(vector<pair<int,int> > adj[],vector<pair<int,int> > NFA[], int V){
+  int v, w;
+  int r;
+		for (auto it = adj[V].begin(); it!=adj[V].end(); ++it)
+		{
+			v = it->first;
 			w = it->second;
+            // cout<< V << "  ";
+            //  cout << v << "  "<< w << "\n";
+             int x,y;
             if(w==0){
-                
-                int x,y;
-                
-                for (auto it = trans[v].begin(); it!=trans[v].end(); it++){
-                    cout << "Node " << v << " makes an edge with \n";
-                    x = it->first;
-			        y = it->second;
-                    // if(u+1==v){
-                    //     x++;
-                    // }
-                    cout << "\tNode " << x << " with edge weight ="
-				<< y << "\n";
-                    string test = to_string(x);
-                    if(eNFA[u][y]=="{}")
-                    eNFA[u][y].clear();
-                    eNFA[u][w].clear();
-                    eNFA[u][w].append(" {} ");
-                    eNFA[u][y].append(test+" ");
-
-                
+                r = 0;
+                for (auto it2 = adj[v].begin(); it2!=adj[v].end(); ++it2){
+                    x = it2->first;
+			        y = it2->second;
+                    //if(y!=0)
+                    addEdge(NFA,V,x,y);
+                    
                 }
             }
-        }
-    }
+            else if(w!=0){
+                r=1;
+            }
+			
+            
+		}
+        
+        return r;
 }
 
+
 // Print adjacency list representation of graph
-void printGraph(vector<pair<int,int> > trans[], int V)
+void printGraph(vector<pair<int,int> > adj[], int V)
 {
 	int v, w;
 	for (int u = 0; u < V; u++)
 	{
-		cout << "Node " << u << " makes an edge with \n";
-		for (auto it = trans[u].begin(); it!=trans[u].end(); it++)
+		for (auto it = adj[u].begin(); it!=adj[u].end(); ++it)
 		{
 			v = it->first;
 			w = it->second;
@@ -88,87 +69,18 @@ void printGraph(vector<pair<int,int> > trans[], int V)
                 
 
             }
-            if(v!=-1)
-             cout << "\tNode " << v << " with edge weight ="
-				<< w << "\n";
+            
+            cout<< u << "  ";
+             cout << v << "  "<< w << "\n";
             
 			
             
 		}
-		cout << "\n";
+		
 	}
 }
 
-void addTransition(vector<pair<int,int> > adj[], int V){
-   
-        int v,w;
-        for (int u = 0; u < V; u++)
-	    {
-		for (auto it = adj[u].begin(); it!=adj[u].end(); it++)
-		{
-			v = it->first;
-			w = it->second;
-            //cout<<endl<<endl<<"-----TEST 1------"<<endl<<endl;
-            //if(w==0){
-                
-            cout << "Node " << u<< " makes an edge with \n";
-                         cout << "\tNode " << v << " with edge weight ="
-				<< w << "\n";
-            //}
-            int x,y;
-             for (auto it = trans[v].begin(); it!=trans[v].end(); it++){
-                    
-                    x = it->first;
-			        y = it->second;
-                //     cout<<endl<<endl<<"-----TEST 2------"<<endl<<endl;
-                //     //if(y==0){
-                //     cout << "Node " << v << " makes an edge with \n";
-                //          cout << "\tNode " << x << " with edge weight ="
-				// << y << "\n";
-                    //}
-             
-                //     int h,k;
-                //     for (auto it = trans[x].begin(); it!=trans[x].end(); it++){
-                //         h = it->first;
-			    //         k = it->second;
-                //         cout<<endl<<endl<<"-----TEST 3------"<<endl<<endl;
-                //         //if(k==0){
-                //         cout << "Node " << x << " makes an edge with \n";
-                //          cout << "\tNode " << h << " with edge weight ="
-				// << k << "\n";
-                //         //}
-                //         int t,e;
-                //         for (auto it = trans[h].begin(); it!=trans[h].end(); it++){
-                //         t = it->first;
-			    //         e = it->second;
-                //         cout<<endl<<endl<<"-----TEST 4------"<<endl<<endl;
-                //        // if(e==0){
-                //         cout << "Node " << h << " makes an edge with \n";
-                //          cout << "\tNode " << t << " with edge weight ="
-				// << e << "\n";
-                //        //}
-                //        int a,s;
-                //         for (auto it = trans[t].begin(); it!=trans[t].end(); it++){
-                //         a = it->first;
-			    //         s = it->second;
-                //         cout<<endl<<endl<<"-----TEST 5------"<<endl<<endl;
-                //        // if(e==0){
-                //         cout << "Node " << t << " makes an edge with \n";
-                //          cout << "\tNode " << a << " with edge weight ="
-				// << s << "\n";
-                    //     }
-                    // }
-                    // }
-             //}
-            
-			
-           
-		}
-        
-		cout << "\n";
-	}
-        }
-    }
+    
 
 
 void readInput(int argc,char*argv[]){
@@ -211,11 +123,6 @@ void readNFA(int argc,char*argv[]){
                         string sub;
                         int j = 0;
                          while(ss>>sub){
-                             for(int k = 0;k<sub.size();k++){
-                                    if(isdigit(sub[k])){
-                                        //cout<<i-3<<" "<<sub[k]<<" found at "<<j<<endl;
-                                    }
-                                }
                             j++;
                                 v1.push_back(sub); 
                          }
@@ -235,6 +142,8 @@ int main(int argc, char* argv[])
 {
     readInput(argc,argv);
     readNFA(argc,argv);
+
+
     int V = numState;
 	vector<pair<int, int> > adj[V];
     ifstream in(argv[1]);
@@ -253,6 +162,7 @@ int main(int argc, char* argv[])
                                     if(isdigit(sub[k])){
                                         y = sub[k]-'0';
                                         addEdge(adj,i-3,y,j);
+                                        addEdge(jNFA,i-3,y,j);
                                     }
                                 }
                                 // if(sub=="{}"){
@@ -268,24 +178,21 @@ int main(int argc, char* argv[])
                 }
                 
            }
-	// int f;
-    // for (int u = 0; u < V; u++)
-	// {
-    //     addTransition(adj,trans,V,u);
-	// 	//cout << "Node " << u << " makes an edge with \n";
-	// 	for (auto it = adj[u].begin(); it!=adj[u].end(); it++)
-	// 	{
-    //         f=it->first;
-    //         if(f!=-1)
-    //         cout<<u<<" "<<f<<endl;
-            
-    //         //addTransition(adj,trans,V,f);
+	
+    
+
+    
+    
+    // for(int i = 0;i<eNFA.size();i++){
+    //     cout<<i<< " ";
+    //     for(int j = 0;j<eNFA[i].size();j++){
+    //         cout<<j<<"  "<<eNFA[i][j];
     //     }
+    //     cout<<endl;
     // }
+ 
     
-	//printGraph(adj, V);
-    
-   addTransition(adj,V);
+   cout<<eNFA[0][0]<<endl;
    
    
     sort(acceptingStates.begin(),acceptingStates.end());
@@ -293,27 +200,6 @@ int main(int argc, char* argv[])
    
     sort(States.begin(),States.end());
     States.erase(unique(States.begin(),States.end()),States.end());
-
-    //  sort(trans.begin(),trans.end());
-    // trans.erase(unique(trans.begin(),trans.end()),trans.end());
-
-    // cout<<endl<<endl<<"ACCEPTING STATES"<<endl;
-    // for(int i = 0;i<acceptingStates.size();i++){
-    //     cout<<acceptingStates[i]<<endl;
-    // }
-    // cout<<endl<<endl<<"STATES : "<<endl;
-    // for(int i = 0;i<States.size();i++){
-    //     cout<<States[i]<<endl;
-    // }
-    cout<<endl<<endl<<"TRANS : "<<endl;
-    //check(trans, V);
-    // for(int i = 0;i<eNFA.size();i++){
-    //     cout<<i<<" ";
-    //     for(int j = 0;j<eNFA[i].size();j++){
-    //         cout<<eNFA[i][j];
-    //     }
-    //     cout<<endl;
-    // }
 
     
     return 0;
